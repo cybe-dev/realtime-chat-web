@@ -21,7 +21,9 @@ const httpServer = createServer(function (req, res) {
 const io = new Server(httpServer, {});
 
 io.on("connection", (socket) => {
-  // ...
+  socket.on("send", (props) => {
+    socket.broadcast.emit("receive", props);
+  });
 });
 
 httpServer.listen(3000);

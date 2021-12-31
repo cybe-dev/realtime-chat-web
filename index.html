@@ -25,7 +25,6 @@
             </div>
             <div class="flex-1 overflow-auto" id="scroll">
                 <div id="wrapper" class="p-5">
-                    
                 </div>
             </div>
             <div class="border-t border-gray-300 flex p-5">
@@ -50,6 +49,7 @@
         </div>
     </div>
     <script>
+        const socket = io();
         const getName = () => {
             return localStorage.getItem('name') || "Pengguna";
         }
@@ -93,6 +93,8 @@
 
             document.getElementById("message").innerText="";
             scrollbar.scroll({y: "100%" });
+
+            socket.emit("send",{name: getName(),text})
         }
 
         const scrollbar = OverlayScrollbars(document.getElementById("scroll"), {
@@ -100,7 +102,16 @@
                 visibility       : "auto",
                 autoHide         : "scroll",
             },
-        }); 
+        });
+        socket.on("receive",({name,text}) => {
+            document.getElementById("wrapper").insertAdjacentHTML("beforeend",`
+            <div class="flex justify-start">
+                <div class="px-3 py-2 mb-2 bg-gray-200 rounded-lg">
+                    <div class="text-primary font-bold">${name}</div>
+                    ${text}
+                </div>
+            </div>`);
+        });
     </script>
 </body>
 </html>
