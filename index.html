@@ -7,18 +7,32 @@
     <title>Ngechat</title>
 
     <link rel="stylesheet" href="/assets/style.css"/>
+    <link rel="stylesheet" href="/assets/overlayscrollbar/css/OverlayScrollbars.min.css"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Josefin+Sans:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdn.socket.io/4.4.0/socket.io.min.js" integrity="sha384-1fOn6VtTq3PWwfsOrk45LnYcGosJwzMHv+Xh/Jx5303FVOXzEnw0EpLv30mtjmlj" crossorigin="anonymous"></script>
+    <script src="/assets/overlayscrollbar/js/OverlayScrollbars.min.js"></script>
 </head>
 <body>
     <div class="h-screen w-screen bg-primary flex justify-center">
-        <div class="bg-white m-10 w-full lg:w-1/3 rounded-xl shadow-lg">
+        <div class="bg-white m-5 lg:m-10 w-full lg:w-1/3 rounded-xl shadow-lg flex flex-col">
             <div class="h-16 bg-gray-700 rounded-t-xl text-white flex items-center justify-between p-5 shadow">
                 <span class="text-2xl jossefin">
                     Ngechat
                 </span>
                 <button type="button" class="text-sm" onclick="showModal()">Ganti Nama</button>
+            </div>
+            <div class="flex-1 overflow-auto" id="scroll">
+                <div id="wrapper" class="p-5">
+                    
+                </div>
+            </div>
+            <div class="border-t border-gray-300 flex p-5">
+                <div class="flex-1 border border-gray-300 rounded p-2 overflow-auto" id="message" style="max-height:100px" placeholder="Tulis sesuatu..." contenteditable></div>
+                <div class="ml-4">
+                    <button type="button" class="bg-primary p-2 border border-primary rounded text-white" onclick="send()">Kirim</button>
+                </div>
             </div>
         </div>
     </div>
@@ -67,6 +81,26 @@
             localStorage.setItem("name",name);
             hideModal();
         }
+
+        function send() {
+            const text = document.getElementById("message").innerText;
+            document.getElementById("wrapper").insertAdjacentHTML("beforeend",`
+            <div class="flex justify-end">
+                <div class="px-3 py-2 mb-2 bg-blue-100 rounded-lg">
+                    ${text}
+                </div>
+            </div>`);
+
+            document.getElementById("message").innerText="";
+            scrollbar.scroll({y: "100%" });
+        }
+
+        const scrollbar = OverlayScrollbars(document.getElementById("scroll"), {
+            scrollbars : {
+                visibility       : "auto",
+                autoHide         : "scroll",
+            },
+        }); 
     </script>
 </body>
 </html>
