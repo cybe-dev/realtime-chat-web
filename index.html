@@ -14,12 +14,58 @@
 <body>
     <div class="h-screen w-screen bg-primary flex justify-center">
         <div class="bg-white m-10 w-full lg:w-1/3 rounded-xl shadow-lg">
-            <div class="h-16 bg-gray-700 rounded-t-xl jossefin text-white flex items-center p-5 text-2xl shadow">Ngechat</div>
+            <div class="h-16 bg-gray-700 rounded-t-xl text-white flex items-center justify-between p-5 shadow">
+                <span class="text-2xl jossefin">
+                    Ngechat
+                </span>
+                <button type="button" class="text-sm" onclick="showModal()">Ganti Nama</button>
+            </div>
+        </div>
+    </div>
+    <div id="overlay" class="hidden fixed top-0 left-0 bg-black w-screen h-screen opacity-75"></div>
+    <div class="hidden fixed top-0 left-0 w-screen h-screen justify-center items-center" id="change-name">
+        <div class="bg-white w-full lg:w-1/3 m-5 rounded shadow">
+            <div class="p-5 border-b border-gray-300 font-bold text-lg flex justify-between">
+                <span>Ganti Nama</span>
+                <button type="button" class="text-sm text-red-400" onclick="hideModal()">Tutup</button>
+            </div>
+            <div class="p-5">
+                <input type="text" class="w-full p-2 border border-gray-300 rounded" id="name"/>
+                <button type="button" class="w-full p-2 bg-primary rounded mt-3 text-white" onclick="saveName()">Simpan</button>
+            </div>
         </div>
     </div>
     <script>
         const getName = () => {
             return localStorage.getItem('name') || "Pengguna";
+        }
+
+        document.getElementById("name").value = getName();
+
+        function showModal() {
+            const modal = document.getElementById("change-name");
+            const overlay = document.getElementById("overlay");
+
+            overlay.classList.remove("hidden");
+            modal.classList.remove("hidden");
+            overlay.classList.add("block");
+            modal.classList.add("flex");
+        }
+
+        function hideModal() {
+            const modal = document.getElementById("change-name");
+            const overlay = document.getElementById("overlay");
+
+            overlay.classList.remove("block");
+            modal.classList.remove("flex");
+            overlay.classList.add("hidden");
+            modal.classList.add("hidden");
+        }
+
+        function saveName() {
+            const name = document.getElementById("name").value;
+            localStorage.setItem("name",name);
+            hideModal();
         }
     </script>
 </body>
